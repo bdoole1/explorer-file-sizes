@@ -5,6 +5,10 @@ This project follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) an
 Semantic Versioning.
 
 ---
+## 1.0.2 — 2025-09-10
+- Add “Refresh All Sizes” to command palette.
+- Watch external changes to keep sizes fresh (light debounce)
+- Docs: clarify deep-scan command and settings
 
 ## 1.0.1 — 2025-08-27
 - Marketplace: add Visualization category

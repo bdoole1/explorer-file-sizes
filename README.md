@@ -5,6 +5,11 @@ Tiny, fast badges in the VS Code Explorer showing file sizes. Hover to see exact
 ![Demo](https://github.com/bdoole1/explorer-file-sizes/blob/main/images/demo.gif?raw=true)
 > Tip: Prefer **Subtle** for clean Explorer UI—tooltips without extra badges.
 
+> **What’s new in 1.0.2**
+> - **Refresh All Sizes** command (clear cache + refresh decorations).
+> - **External change watcher** to keep sizes fresh when files change outside VS Code.
+> - **Folder Badge Mode** is now set to showing folder sizes by default.
+
 ---
 
 ## Features
@@ -34,11 +39,11 @@ Tiny, fast badges in the VS Code Explorer showing file sizes. Hover to see exact
   - `nocase` on Windows
   - Matches both **absolute** and **workspace-relative** paths
 - Examples:
-  - Ignore all `node_modules`:  
+  - Ignore all `node_modules`:
     `**/node_modules/**`
-  - Ignore generated assets:  
+  - Ignore generated assets:
     `**/dist/**`, `**/build/**`, `**/.next/**`, `**/target/**`
-  - Ignore logs/temp:  
+  - Ignore logs/temp:
     `**/*.log`, `**/tmp/**`, `**/.cache/**`
 
 > Tune this list per project for faster, more accurate folder sizes.
@@ -52,6 +57,15 @@ Tiny, fast badges in the VS Code Explorer showing file sizes. Hover to see exact
 - Reads metadata via the VS Code **FileSystem** API—no external binaries, no telemetry.
 
 ---
+## Commands
+
+- **Explorer File Sizes: Show Folder Size**
+  Right-click a folder in Explorer → *Show Folder Size* (deep scan with progress).
+
+- **Explorer File Sizes: Refresh All Sizes**
+  Command Palette → *Refresh All Sizes* to clear the cache and refresh all decorations immediately.
+
+---
 
 ### Installation
 
@@ -60,7 +74,7 @@ Tiny, fast badges in the VS Code Explorer showing file sizes. Hover to see exact
 **From Marketplace (recommended)**
 1. Open the **Extensions** view (`Ctrl/Cmd+Shift+X`).
 2. Search **Explorer File Sizes**.
-3. Click **Install**.  
+3. Click **Install**.
    > For Remote-SSH/WSL/Containers, use **Install in…** to target the remote.
 
 **Install via CLI**
@@ -122,6 +136,9 @@ code-insiders --install-extension ./explorer-file-sizes-<version>.vsix
 - VS Code shows **one** decoration per item; other providers may mask this extension’s badge/tooltip on that item.
 - Budgets (time/entry count) keep the UI responsive; folder tooltips show `~` when that happens.
 - Use the Explorer context menu for a guaranteed, deeper folder size.
+
+## Privacy
+This extension sends **no telemetry** and makes **no network requests**. All size calculations happen locally.
 
 ---
 

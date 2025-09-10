@@ -2,16 +2,44 @@
   "name": "explorer-file-sizes",
   "displayName": "Explorer File Sizes",
   "description": "Tiny, fast file size badges in the VS Code Explorer with tooltips and optional folder sizes.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publisher": "BrianDooley",
-  "engines": { "vscode": "^1.90.0" },
-  "categories": ["Other", "Visualization"],
-  "keywords": ["explorer", "file size", "file sizes", "decorations", "badge", "tooltip","explorer",
-    "file-size", "folder-size", "sizes", "filesize", "badges", "tooltip", "decorations", "file-decorations",
-    "explorer-decorations", "hover", "status-bar", "disk-usage", "resource-usage", "performance", "glob",
-    "exclude", "minimatch"
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other",
+    "Visualization"
   ],
-  "activationEvents": ["onStartupFinished"],
+  "keywords": [
+    "explorer",
+    "file size",
+    "file sizes",
+    "decorations",
+    "badge",
+    "tooltip",
+    "explorer",
+    "file-size",
+    "folder-size",
+    "sizes",
+    "filesize",
+    "badges",
+    "tooltip",
+    "decorations",
+    "file-decorations",
+    "explorer-decorations",
+    "hover",
+    "status-bar",
+    "disk-usage",
+    "resource-usage",
+    "performance",
+    "glob",
+    "exclude",
+    "minimatch"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./dist/extension.js",
   "icon": "images/icon.png",
   "files": [
@@ -22,8 +50,13 @@
     "LICENSE",
     "package.json"
   ],
-  "repository": { "type": "git", "url": "https://github.com/bdoole1/explorer-file-sizes.git" },
-  "bugs": { "url": "https://github.com/bdoole1/explorer-file-sizes/issues" },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bdoole1/explorer-file-sizes.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bdoole1/explorer-file-sizes/issues"
+  },
   "homepage": "https://github.com/bdoole1/explorer-file-sizes#readme",
   "license": "MIT",
   "contributes": {
@@ -32,7 +65,11 @@
       "properties": {
         "explorerFileSizes.badgeMode": {
           "type": "string",
-          "enum": ["full", "subtle", "off"],
+          "enum": [
+            "full",
+            "subtle",
+            "off"
+          ],
           "default": "full",
           "description": "How badges render in the Explorer:\nfull = 2-char size (e.g. 1M);\nsubtle = tooltip only (no badge);\noff = no decorations (status bar still shows active file size)."
         },
@@ -43,20 +80,34 @@
         },
         "explorerFileSizes.folderHoverIndicator": {
           "type": "string",
-          "enum": ["calculating", "off"],
+          "enum": [
+            "calculating",
+            "off"
+          ],
           "default": "calculating",
           "description": "Folder hover hotspot. 'calculating' shows ⏳ only while 'off' disables folder tooltips."
         },
         "explorerFileSizes.excludeGlobs": {
           "type": "array",
-          "default": ["**/node_modules/**", "**/.git/**", "**/dist/**", "**/build/**"],
-          "items": { "type": "string" },
+          "default": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/dist/**",
+            "**/build/**"
+          ],
+          "items": {
+            "type": "string"
+          },
           "description": "Globs to exclude when computing folder sizes."
         },
         "explorerFileSizes.folderBadgeMode": {
           "type": "string",
-          "enum": ["off", "calculating", "size"],
-          "default": "calculating",
+          "enum": [
+            "off",
+            "calculating",
+            "size"
+          ],
+          "default": "size",
           "description": "Folder badges:\n'off' = none,\n'calculating' = show ⏳ while computing,\n'size' = show 2-char size after computed (may conflict with other badges)."
         }
       }
@@ -64,7 +115,12 @@
     "commands": [
       {
         "command": "explorerFileSizes.showFolderSize",
-        "title": "Explorer File Sizes: Show Folder Size",
+        "title": "Show Folder Size",
+        "category": "Explorer File Sizes"
+      },
+      {
+        "command": "explorerFileSizes.refreshAll",
+        "title": "Refresh All Sizes",
         "category": "Explorer File Sizes"
       }
     ],

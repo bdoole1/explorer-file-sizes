@@ -43,6 +43,70 @@ function isExcluded(uri: vscode.Uri): boolean {
 }
 
 export function activate(context: vscode.ExtensionContext) {
+
+    // at top-level in activate()
+  let watchers: vscode.FileSystemWatcher[] = [];
+
+  function setupWatchers() {
+    // dispose old watchers (if workspace folders changed)
+    for (const w of watchers) w.dispose();
+    watchers = [];
+
+    const folders = vscode.workspace.workspaceFolders ?? [];
+    for (const folder of folders) {
+      const pattern = new vscode.RelativePattern(folder, '**/*');
+      const w = vscode.workspace.createFileSystemWatcher(pattern, false, false, false);
+
+      const onTouch = (uri: vscode.Uri) => {
+        invalidatePathAndAncestors(uri);
+      };
+
+      w.onDidCreate(onTouch);
+      w.onDidChange(onTouch);
+      w.onDidDelete(onTouch);
+
+      watchers.push(w);
+    }
+  }
+
+  function invalidatePathAndAncestors(uri: vscode.Uri) {
+    const touched = new Set<string>();
+    const touch = (u: vscode.Uri) => {
+      const k = u.toString();
+      if (!touched.has(k)) {
+        cache.delete(k);
+        touched.add(k);
+      }
+    };
+
+    // file/folder itself
+    touch(uri);
+
+    // parent folders up to workspace root
+    let p = uri.path;
+    while (true) {
+      const i = p.lastIndexOf('/');
+      if (i <= 0) break;
+      p = p.slice(0, i);
+      touch(uri.with({ path: p }));
+    }
+
+    // Notify decorations for just the affected paths
+    onDidChangeFileDecorations.fire(Array.from(touched).map(s => vscode.Uri.parse(s)));
+
+    // Status bar update if the active doc is the one we touched
+    if (vscode.window.activeTextEditor?.document?.uri.toString() === uri.toString()) {
+      void updateStatus(uri);
+    }
+  }
+
+  // call once on startup and whenever folders change
+  setupWatchers();
+  context.subscriptions.push(
+    ...watchers,
+    vscode.workspace.onDidChangeWorkspaceFolders(() => setupWatchers())
+  );
+
   console.log('Explorer File Sizes activated');
 
   const config = () => vscode.workspace.getConfiguration('explorerFileSizes');
@@ -110,6 +174,15 @@ export function activate(context: vscode.ExtensionContext) {
       }
     }
   };
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand('explorerFileSizes.refreshAll', async () => {
+      cache.clear();
+      onDidChangeFileDecorations.fire(undefined); // refresh everything
+      updateStatus(vscode.window.activeTextEditor?.document?.uri);
+      vscode.window.showInformationMessage('Explorer File Sizes: refreshed.');
+    })
+  );
 
   // Command: on-demand folder size with larger budget + progress UX (works even if another badge wins)
   context.subscriptions.push(
